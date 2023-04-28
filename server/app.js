@@ -1,11 +1,16 @@
 const express = require('express');
 const {queueVideo} = require('./lib/queue-video');
 const {transcodeVideo} = require('./lib/transcode-video');
+const fileUpload = require('express-fileupload');
 const app = express()
 const port = 3000;
 
-app.get('/', async (req, res) => {
-    await queueVideo();
+// default options
+app.use(fileUpload());
+
+app.post('/', async (req, res) => {
+    console.log(req.files);
+    //await queueVideo();
     res.send("1")
 })
 
