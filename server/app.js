@@ -1,18 +1,19 @@
 const express = require('express');
-const {queueVideo} = require('./lib/queue-video');
 const {transcodeVideo} = require('./lib/transcode-video');
 const fileUpload = require('express-fileupload');
+const videoRoutes = require('./routes/video');
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/vidly', {useNewUrlParser: true, useUnifiedTopology: true})
+
 const app = express()
 const port = 3000;
 
 // default options
 app.use(fileUpload());
 
-app.post('/', async (req, res) => {
-    console.log(req.files);
-    //await queueVideo();
-    res.send("1")
-})
+app.use(express.static('static'));
+
+app.use('/video', videoRoutes);
 
 transcodeVideo();
 
