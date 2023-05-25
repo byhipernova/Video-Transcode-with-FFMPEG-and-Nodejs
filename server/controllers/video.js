@@ -6,12 +6,10 @@ const { queueVideo } = require("../lib/queue-video");
 
 exports.saveVideo = async (req) =>{
     const video = req.files.video;
-    const videoPath = `static/video/${video.name}`;
+    const videoPath = `static/video/${video.md5}.${video.name.split(".").pop()}`;
     await video.mv(videoPath);
-    // get video info
     let info = await
     ffprobe(videoPath, { path: ffprobeStatic.path }).then(async info => {
-        console.log(typeof Video)
         const newVideo = new Video({
             title: video.name,
             videoPath: videoPath,
