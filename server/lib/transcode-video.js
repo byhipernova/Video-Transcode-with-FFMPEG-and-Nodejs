@@ -11,7 +11,7 @@ async function transcodeVideo() {
             channel.prefetch(1);
             channel.consume(queueName, async (msg) => {
                 const videoId = msg.content.toString();
-                const  resolutions = [/*"?x1080", "?x720", "?x480", "?x360",*/ "?x240", "?x144"];
+                const  resolutions = ["?x1080", "?x720", "?x480", "?x360", "?x240", "?x144"];
                 for(const resolution of resolutions) {
                     await convertVideo(videoId, resolution);
                     console.log(resolution)
@@ -30,7 +30,7 @@ async function convertVideo(videoId,resolution) {
     const videoPath = video.videoPath;
     const outputPath = `static/video/output${videoId}${Math.floor(Math.random() * 10)}_${resolution.replace("?x", "")}.mp4`;
     const process = new ffmpeg(videoPath);
-    process.then((video) => {
+    await process.then((video) => {
         return new Promise((resolve, reject) => {
             video.setVideoSize(resolution).save(outputPath, (error, file) => {
                 if (!error) {
